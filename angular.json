@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/keycloak-angular",
+            "outputPath": "dist/kc-demo",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -55,10 +55,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "keycloak-angular:build:production"
+              "buildTarget": "kc-demo:build:production"
             },
             "development": {
-              "buildTarget": "keycloak-angular:build:development"
+              "buildTarget": "kc-demo:build:development"
             }
           },
           "defaultConfiguration": "development"
