@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   OnInit,
+  signal,
 } from '@angular/core';
 
 import { BookService } from '../../services/book.service';
@@ -14,12 +15,12 @@ import { Book } from '../../models/book.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BooksComponent implements OnInit {
-  books: Book[] = [];
+  readonly books = signal<Book[]>([]);
   private readonly bookService = inject(BookService);
 
   ngOnInit() {
     this.bookService.listBooks().subscribe((data) => {
-      this.books = data;
+      this.books.set(data);
     });
   }
 }

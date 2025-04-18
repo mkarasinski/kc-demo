@@ -1,10 +1,18 @@
-<div class="section">
-  <header>
-    <h1>403 - Forbidden</h1>
+<div
+  class="min-h-screen bg-gray-900 text-gray-100 p-6 flex flex-col items-center justify-center"
+>
+  <header class="mb-6 text-center">
+    <h1 class="text-4xl font-bold text-amber-400">403 - Forbidden</h1>
   </header>
 
-  <main>
-    <p class="error-message">You do not have permission to access this page.</p>
-    <a class="home-link" routerLink="/">Go to Home</a>
+  <main class="text-center">
+    <p class="text-xl text-gray-300 mb-8">
+      You do not have permission to access this page.
+    </p>
+    <a
+      routerLink="/"
+      class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors duration-200"
+      >Go to Home</a
+    >
   </main>
 </div>

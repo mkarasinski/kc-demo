@@ -1,27 +1,38 @@
-<div class="section">
-  <header>
-    <h1>Sci-Fi Book List</h1>
-    <p class="description">
+<div class="min-h-screen bg-gray-900 text-gray-100 p-6">
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold text-emerald-400 mb-4">Sci-Fi Book List</h1>
+    <p class="text-gray-300 max-w-2xl mb-4">
       This component uses a service to fetch books from a mocked server. It is
       designed to test the Bearer Interceptor feature.<br />
       Open the developer tools in your browser and inspect the request to
-      <code>http://localhost:8181/books</code>. The request should include the
-      <code>Authorization</code> header with the Bearer token.
+      <code class="px-1.5 py-0.5 bg-gray-800 rounded text-amber-300 text-sm"
+        >http://localhost:8181/books</code
+      >. The request should include the
+      <code class="px-1.5 py-0.5 bg-gray-800 rounded text-amber-300 text-sm"
+        >Authorization</code
+      >
+      header with the Bearer token.
     </p>
   </header>
 
   <main>
-    @if (books.length === 0) {
-      <p class="no-books">
-        No books found. Did you start the <code>example-server</code> project?
+    @if (books().length === 0) {
+      <p class="text-amber-300 bg-gray-800 p-4 rounded-lg max-w-md">
+        No books found. Did you start the
+        <code class="px-1.5 py-0.5 bg-gray-700 rounded text-amber-300 text-sm"
+          >example-server</code
+        >
+        project?
       </p>
     } @else {
-      <ul class="book-list">
-        @for (book of books; track book.id) {
-          <li class="book-item">
-            <strong>{{ book.title }}</strong> by {{ book.author }} ({{
-              book.year
-            }})
+      <ul class="space-y-3 bg-gray-800 rounded-lg shadow-lg p-6 max-w-2xl">
+        @for (book of books(); track book.id) {
+          <li class="p-3 border-b border-gray-700 last:border-0">
+            <strong class="text-emerald-400">{{ book.title }}</strong>
+            &nbsp;
+            <span class="text-gray-300"
+              >by {{ book.author }} ({{ book.year }})</span
+            >
           </li>
         }
       </ul>

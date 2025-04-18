@@ -1,20 +1,46 @@
-<nav class="menu">
-  <div class="developer-status">
-    <strong>Keycloak Events:</strong> {{ keycloakStatus }}
+<nav
+  class="bg-gray-800 shadow-md p-4 flex flex-col md:flex-row md:items-center md:justify-between"
+>
+  <div
+    class="text-amber-300 bg-gray-900 px-3 py-2 rounded mb-3 md:mb-0 inline-block"
+  >
+    <strong>Keycloak Events:</strong> {{ keycloakStatus() }}
   </div>
 
-  <div class="actions">
-    <a routerLink="/" class="action-item">Home</a>
-    <a routerLink="/books" class="action-item" *kaHasRoles="['view-books']"
-      >My Books</a
+  <div class="flex flex-wrap gap-3">
+    <a
+      routerLink="/"
+      class="px-4 py-2 text-gray-100 hover:text-emerald-400 transition-colors duration-200"
+      >Home</a
     >
-    <a routerLink="/profile" class="action-item" *kaHasRoles="['view-profile']"
-      >My Profile</a
+    <a
+      routerLink="/books"
+      class="px-4 py-2 text-gray-100 hover:text-emerald-400 transition-colors duration-200"
+      *kaHasRoles="['view-books']"
     >
-    @if (!authenticated) {
-      <button class="action-item" (click)="login()">Login</button>
+      My Books
+    </a>
+    <a
+      routerLink="/profile"
+      class="px-4 py-2 text-gray-100 hover:text-emerald-400 transition-colors duration-200"
+      *kaHasRoles="['view-profile']"
+    >
+      My Profile
+    </a>
+    @if (!authenticated()) {
+      <button
+        class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded transition-colors duration-200"
+        (click)="login()"
+      >
+        Login
+      </button>
     } @else {
-      <button class="action-item" (click)="logout()">Logout</button>
+      <button
+        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded transition-colors duration-200"
+        (click)="logout()"
+      >
+        Logout
+      </button>
     }
   </div>
 </nav>

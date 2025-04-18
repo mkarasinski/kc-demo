@@ -1,19 +1,38 @@
-<div class="section">
-  <header>
-    <h1>Welcome, {{ user?.name }}</h1>
-    <p class="description">
+<div class="min-h-screen bg-gray-900 text-gray-100 p-6">
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold text-emerald-400 mb-2">
+      Welcome, {{ user()?.name }}
+    </h1>
+    <p class="text-gray-300 max-w-2xl">
       This page is protected by an Auth Guard and uses the
-      <code>*kaHasRoles</code> structural directive to restrict access based on
-      user roles.
+      <code class="px-1.5 py-0.5 bg-gray-800 rounded text-amber-300 text-sm"
+        >*kaHasRoles</code
+      >
+      structural directive to restrict access based on user roles.
     </p>
   </header>
 
   <main>
-    <section class="profile-card">
-      <h2>Profile Details</h2>
-      <p><strong>Name:</strong> {{ user?.name }}</p>
-      <p><strong>Email:</strong> {{ user?.email }}</p>
-      <p><strong>Username:</strong> {{ user?.username }}</p>
+    <section class="bg-gray-800 rounded-lg shadow-lg p-6 max-w-md">
+      <h2
+        class="text-xl font-semibold text-emerald-400 mb-4 border-b border-gray-700 pb-2"
+      >
+        Profile Details
+      </h2>
+      <div class="space-y-3">
+        <p class="flex">
+          <span class="font-medium text-gray-300 w-24">Name:</span>
+          <span>{{ user()?.name }}</span>
+        </p>
+        <p class="flex">
+          <span class="font-medium text-gray-300 w-24">Email:</span>
+          <span>{{ user()?.email }}</span>
+        </p>
+        <p class="flex">
+          <span class="font-medium text-gray-300 w-24">Username:</span>
+          <span>{{ user()?.username }}</span>
+        </p>
+      </div>
     </section>
   </main>
 </div>

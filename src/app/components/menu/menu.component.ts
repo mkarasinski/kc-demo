@@ -3,6 +3,7 @@ import {
   Component,
   effect,
   inject,
+  signal,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import Keycloak from 'keycloak-js';
@@ -21,8 +22,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuComponent {
-  authenticated = false;
-  keycloakStatus: string | undefined;
+  readonly authenticated = signal<boolean>(false);
+  readonly keycloakStatus = signal<string | undefined>(undefined);
   private readonly keycloak = inject(Keycloak);
   private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
 
@@ -30,14 +31,14 @@ export class MenuComponent {
     effect(() => {
       const keycloakEvent = this.keycloakSignal();
 
-      this.keycloakStatus = keycloakEvent.type;
+      this.keycloakStatus.set(keycloakEvent.type);
 
       if (keycloakEvent.type === KeycloakEventType.Ready) {
-        this.authenticated = typeEventArgs<ReadyArgs>(keycloakEvent.args);
+        this.authenticated.set(typeEventArgs<ReadyArgs>(keycloakEvent.args));
       }
 
       if (keycloakEvent.type === KeycloakEventType.AuthLogout) {
-        this.authenticated = false;
+        this.authenticated.set(false);
       }
     });
   }

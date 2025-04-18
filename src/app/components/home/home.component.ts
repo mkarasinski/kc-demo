@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BehaviorSubject, timer } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -8,23 +7,18 @@ import { BehaviorSubject, timer } from 'rxjs';
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnDestroy {
-  private copyMessageSubject = new BehaviorSubject<string | null>(null);
-  copyMessage$ = this.copyMessageSubject.asObservable(); // Expose as Observable
+export class HomeComponent {
+  readonly copyMessage = signal<string | null>(null);
 
   copyToClipboard(text: string): void {
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        this.copyMessageSubject.next(`"${text}" copied to clipboard!`);
-        timer(3000).subscribe(() => this.copyMessageSubject.next(null));
+        this.copyMessage.set(`"${text}" copied to clipboard!`);
+        setTimeout(() => this.copyMessage.set(null), 3000);
       })
       .catch(() => {
-        this.copyMessageSubject.next('Failed to copy text. Please try again.');
+        this.copyMessage.set('Failed to copy text. Please try again.');
       });
-  }
-
-  ngOnDestroy(): void {
-    this.copyMessageSubject.complete();
   }
 }
