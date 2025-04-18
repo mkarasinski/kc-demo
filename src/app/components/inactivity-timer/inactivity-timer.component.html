@@ -1,0 +1,25 @@
+<div
+  *ngIf="showDebug()"
+  class="flex items-center space-x-4 p-2 text-sm bg-gray-700 rounded text-white"
+>
+  <div class="flex items-center">
+    <span class="font-semibold mr-1">Inactive:</span>
+    <span class="text-amber-300">{{ inactiveSeconds() }}</span>
+    <span class="text-gray-400 ml-1">s</span>
+  </div>
+
+  <div class="h-4 border-l border-gray-600"></div>
+
+  <div class="flex items-center">
+    <span class="font-semibold mr-1">Warning in:</span>
+    <span
+      [ngClass]="{
+        'text-green-400': timeUntilWarning() > 60,
+        'text-amber-300': timeUntilWarning() <= 60 && timeUntilWarning() > 10,
+        'text-red-400': timeUntilWarning() <= 10,
+      }"
+      >{{ timeUntilWarning() }}</span
+    >
+    <span class="text-gray-400 ml-1">s</span>
+  </div>
+</div>

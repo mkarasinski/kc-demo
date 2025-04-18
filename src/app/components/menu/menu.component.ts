@@ -14,10 +14,11 @@ import {
   typeEventArgs,
   ReadyArgs,
 } from 'keycloak-angular';
+import { InactivityTimerComponent } from '../inactivity-timer/inactivity-timer.component';
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterModule, HasRolesDirective],
+  imports: [RouterModule, HasRolesDirective, InactivityTimerComponent],
   templateUrl: './menu.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

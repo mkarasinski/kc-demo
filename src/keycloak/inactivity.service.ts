@@ -22,12 +22,10 @@ export class InactivityService implements OnDestroy {
   private readonly keycloak = inject(Keycloak);
   private readonly router = inject(Router);
 
-  // Configuration
-  //   private readonly inactivityTimeout = 15 * 60 * 1000; // 15 minutes
-  //   private readonly warningTimeout = 14 * 60 * 1000; // 14 minutes (1 minute before logout)
-
-  private readonly inactivityTimeout = 1.5 * 60 * 1000; // 15 minutes
-  private readonly warningTimeout = 1 * 60 * 1000; // 14 minutes (1 minute before logout)
+  // Configuration - Testing values (shorter for easy testing)
+  // TODO: Change back to 15 minutes and 14 minutes for production
+  private readonly inactivityTimeout = 60 * 1000; // 1 minute for testing (should be 15 * 60 * 1000 in production)
+  private readonly warningTimeout = 30 * 1000; // 30 seconds for testing (should be 14 * 60 * 1000 in production)
 
   // Destruction subject to clean up subscriptions
   private readonly destroy$ = new Subject<void>();
@@ -115,5 +113,26 @@ export class InactivityService implements OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /**
+   * Get the current inactive time in milliseconds
+   */
+  getInactiveTime(): number {
+    return Date.now() - this.lastActivityTime;
+  }
+
+  /**
+   * Get the warning threshold in milliseconds
+   */
+  getWarningThreshold(): number {
+    return this.warningTimeout;
+  }
+
+  /**
+   * Get the total inactivity timeout in milliseconds
+   */
+  getInactivityTimeout(): number {
+    return this.inactivityTimeout;
   }
 }

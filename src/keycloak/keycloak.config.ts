@@ -27,11 +27,10 @@ export const provideKeycloakAngular = () =>
       redirectUri: window.location.origin + '/',
     },
     features: [
-      // Configure auto-refresh token with 15 minute timeout
-      // Note: We're not using the built-in logout here because we're handling
-      // that in our InactivityService to show a warning first
+      // Configure auto-refresh token with shorter timeout for testing
+      // TODO: Change back to 15 minutes for production
       withAutoRefreshToken({
-        sessionTimeout: 1.5 * 60 * 1000, // 15 minutes
+        sessionTimeout: 60 * 1000, // 1 minute for testing (should be 15 * 60 * 1000 in production)
         onInactivityTimeout: 'none', // We handle this in our InactivityService
       }),
     ],
