@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.0
+    container_name: keycloak_web
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - 8080:8080
+    volumes:
+      - ./config/:/opt/keycloak/data/import:ro,Z
+    entrypoint: >
+      /opt/keycloak/bin/kc.sh start-dev
+      --import-realm
+      --import-path=/opt/keycloak/data/import/keycloak-angular-sandbox-realm.json
