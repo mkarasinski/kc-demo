@@ -25,6 +25,7 @@ export const provideKeycloakAngular = () =>
       silentCheckSsoRedirectUri:
         window.location.origin + '/silent-check-sso.html',
       redirectUri: window.location.origin + '/',
+      checkLoginIframe: false, // Disable iframe check to reduce errors
     },
     features: [
       // Configure auto-refresh token with shorter timeout for testing
