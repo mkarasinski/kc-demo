@@ -1,4 +1,9 @@
-import { Component, effect, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import Keycloak from 'keycloak-js';
 import {
@@ -6,14 +11,14 @@ import {
   KEYCLOAK_EVENT_SIGNAL,
   KeycloakEventType,
   typeEventArgs,
-  ReadyArgs
+  ReadyArgs,
 } from 'keycloak-angular';
 
 @Component({
   selector: 'app-menu',
   imports: [RouterModule, HasRolesDirective],
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css']
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuComponent {
   authenticated = false;

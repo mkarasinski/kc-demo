@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-forbidden',
   imports: [RouterModule],
   templateUrl: './forbidden.component.html',
-  styleUrls: ['./forbidden.component.css']
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForbiddenComponent {}

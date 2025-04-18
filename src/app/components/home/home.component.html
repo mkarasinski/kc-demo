@@ -6,17 +6,27 @@
 
   <main>
     <section>
-      <p class="description">To access the application, use the following credentials for testing:</p>
+      <p class="description">
+        To access the application, use the following credentials for testing:
+      </p>
       <ul class="credentials">
         <li>
           <strong>User:</strong> <code>johndoe</code>
-          <button class="copy-btn" (click)="copyToClipboard('johndoe')" aria-label="Copy User">
+          <button
+            class="copy-btn"
+            (click)="copyToClipboard('johndoe')"
+            aria-label="Copy User"
+          >
             <i class="copy-icon">📋</i>
           </button>
         </li>
         <li>
           <strong>Password:</strong> <code>qwerty&#64;123</code>
-          <button class="copy-btn" (click)="copyToClipboard('qwerty@123')" aria-label="Copy Password">
+          <button
+            class="copy-btn"
+            (click)="copyToClipboard('qwerty@123')"
+            aria-label="Copy Password"
+          >
             <i class="copy-icon">📋</i>
           </button>
         </li>

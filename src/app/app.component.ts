@@ -1,20 +1,17 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { MenuComponent } from './components/menu/menu.component';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [MenuComponent, RouterModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-menu></app-menu>
     <main>
       <router-outlet></router-outlet>
     </main>
   `,
-  styles: [``],
 })
-export class AppComponent {
-  constructor() {}
-}
+export class AppComponent {}

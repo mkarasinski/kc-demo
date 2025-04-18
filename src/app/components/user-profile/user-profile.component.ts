@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { User } from '../../models/user.model';
 import Keycloak from 'keycloak-js';
 
 @Component({
   selector: 'app-user-profile',
   templateUrl: 'user-profile.component.html',
-  styleUrls: [`user-profile.component.css`]
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserProfileComponent implements OnInit {
   user: User | undefined;
@@ -19,7 +19,7 @@ export class UserProfileComponent implements OnInit {
       this.user = {
         name: `${profile?.firstName} ${profile.lastName}`,
         email: profile?.email,
-        username: profile?.username
+        username: profile?.username,
       };
     }
   }
