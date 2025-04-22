@@ -2,6 +2,10 @@
 <div
   *ngIf="showWarning() && keycloak.authenticated"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+  role="alertdialog"
+  aria-modal="true"
+  aria-labelledby="session-timeout-title"
+  aria-describedby="session-timeout-description"
 >
   <!-- Modal container -->
   <div
@@ -15,6 +19,7 @@
         stroke="currentColor"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"
@@ -23,12 +28,14 @@
           d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
         ></path>
       </svg>
-      <h2 class="text-xl font-bold text-white">Session Timeout Warning</h2>
+      <h2 id="session-timeout-title" class="text-xl font-bold text-white">
+        Session Timeout Warning
+      </h2>
     </div>
 
     <!-- Modal body -->
     <div class="mb-6">
-      <p class="text-gray-300 mb-4">
+      <p id="session-timeout-description" class="text-gray-300 mb-4">
         Your session is about to expire due to inactivity.
       </p>
       <div
@@ -36,29 +43,17 @@
       >
         <div class="text-xl font-bold text-amber-400">
           Session expires in:
-          <span class="text-2xl">{{ remainingTime() }}</span> seconds
+          <span class="text-2xl">{{ countdown() }}</span> seconds
         </div>
       </div>
       <p class="text-gray-300">
-        Click "Continue" to extend your session or "Logout" to end your session
-        now.
+        Move your mouse or press any key to continue your session.
       </p>
     </div>
-
-    <!-- Modal footer -->
-    <div class="flex justify-end space-x-3">
-      <button
-        (click)="logout()"
-        class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors duration-200"
-      >
-        Logout
-      </button>
-      <button
-        (click)="continueSession()"
-        class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded transition-colors duration-200"
-      >
-        Continue Session
-      </button>
-    </div>
   </div>
+</div>
+
+<!-- Screen reader announcement when warning appears -->
+<div aria-live="assertive" class="sr-only">
+  {{ sessionStatusAnnouncement() }}
 </div>

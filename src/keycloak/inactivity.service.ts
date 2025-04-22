@@ -12,6 +12,7 @@ import {
 } from 'rxjs';
 import Keycloak from 'keycloak-js';
 import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType } from 'keycloak-angular';
+import { environment } from '../environments/environment';
 
 /**
  * Service to track user inactivity and show warning before logging out
@@ -24,10 +25,9 @@ export class InactivityService implements OnDestroy {
   private readonly router = inject(Router);
   private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
 
-  // Configuration - Testing values (shorter for easy testing)
-  // TODO: Change back to 15 minutes and 14 minutes for production
-  private readonly inactivityTimeout = 60 * 1000; // 1 minute for testing (should be 15 * 60 * 1000 in production)
-  private readonly warningTimeout = 30 * 1000; // 30 seconds for testing (should be 14 * 60 * 1000 in production)
+  // Configuration from environment
+  private readonly inactivityTimeout = environment.sessionTimeouts.inactivity;
+  private readonly warningTimeout = environment.sessionTimeouts.warning;
 
   // Destruction subject to clean up subscriptions
   private readonly destroy$ = new Subject<void>();
@@ -59,9 +59,11 @@ export class InactivityService implements OnDestroy {
         this.keycloak.authenticated
       ) {
         // Start tracking when authenticated
+        console.log('Auth ready, starting inactivity tracking');
         this.startTracking();
       } else if (event.type === KeycloakEventType.AuthLogout) {
         // Stop tracking when logged out
+        console.log('Auth logout, stopping inactivity tracking');
         this.stopTracking();
       }
     });
@@ -84,9 +86,9 @@ export class InactivityService implements OnDestroy {
     // Ensure we have a valid token first
     this.refreshToken()
       .then(() => {
-        // Set up proactive token refresh every 30 seconds when active
-        // This helps avoid the "Client session not active" error
-        interval(30000) // Check every 30 seconds
+        // Set up proactive token refresh every 60 seconds when active
+        // Less frequent refreshes help avoid "Session doesn't have required client" errors
+        interval(60000) // Check every 60 seconds instead of 30
           .pipe(takeUntil(this.activitySubscription$))
           .subscribe(() => {
             // Only refresh if we're active (not in warning state)
@@ -177,9 +179,9 @@ export class InactivityService implements OnDestroy {
       return Promise.resolve(false);
     }
 
-    // Minimal validity - try to refresh the token if it will expire in the next 30 seconds
-    // This is the key parameter that affects refresh behavior!
-    const minValidity = 30;
+    // Use a shorter minValidity to reduce refresh frequency
+    // This helps avoid the "Session doesn't have required client" error
+    const minValidity = 10;
 
     return this.keycloak
       .updateToken(minValidity)
@@ -194,7 +196,19 @@ export class InactivityService implements OnDestroy {
       .catch((error) => {
         console.error('Failed to refresh token:', error);
 
-        // Only log out if we're still authenticated
+        // For "Session doesn't have required client" error, try to re-login
+        if (
+          error &&
+          typeof error === 'string' &&
+          (error.includes("Session doesn't have required client") ||
+            error.includes('invalid_grant'))
+        ) {
+          console.warn('Session error detected, redirecting to login');
+          this.keycloak.login();
+          return false;
+        }
+
+        // Only log out if we're still authenticated and it's another type of error
         if (this.keycloak.authenticated) {
           console.log('Logging out due to refresh token failure');
           this.logout();
@@ -246,6 +260,18 @@ export class InactivityService implements OnDestroy {
    */
   getInactiveTime(): number {
     return this.isTracking() ? Date.now() - this.lastActivityTime : 0;
+  }
+
+  /**
+   * Get seconds remaining until timeout when warning is shown
+   */
+  getSecondsUntilTimeout(): number {
+    // When warning is shown, we have inactivityTimeout - warningTimeout seconds left
+    const timeoutSecs = Math.round(
+      (this.inactivityTimeout - this.warningTimeout) / 1000,
+    );
+    console.log('Time until logout:', timeoutSecs, 'seconds');
+    return timeoutSecs;
   }
 
   /**

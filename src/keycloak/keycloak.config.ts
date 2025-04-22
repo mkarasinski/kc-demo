@@ -7,6 +7,7 @@ import {
   AutoRefreshTokenService,
   UserActivityService,
 } from 'keycloak-angular';
+import { environment } from '../environments/environment';
 
 const localhostCondition =
   createInterceptorCondition<IncludeBearerTokenCondition>({
@@ -28,10 +29,9 @@ export const provideKeycloakAngular = () =>
       checkLoginIframe: false, // Disable iframe check to reduce errors
     },
     features: [
-      // Configure auto-refresh token with shorter timeout for testing
-      // TODO: Change back to 15 minutes for production
+      // Configure auto-refresh token with environment-based timeout
       withAutoRefreshToken({
-        sessionTimeout: 60 * 1000, // 1 minute for testing (should be 15 * 60 * 1000 in production)
+        sessionTimeout: environment.sessionTimeouts.inactivity,
         onInactivityTimeout: 'none', // We handle this in our InactivityService
       }),
     ],

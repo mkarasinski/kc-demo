@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { interval, Subject, takeUntil } from 'rxjs';
 import Keycloak from 'keycloak-js';
 import { InactivityService } from '../../../keycloak/inactivity.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-inactivity-timer',
@@ -28,12 +28,12 @@ export class InactivityTimerComponent implements OnInit, OnDestroy {
   // Signals for timer display
   readonly inactiveSeconds = signal<number>(0);
   readonly timeUntilWarning = signal<number>(0);
-  readonly showDebug = signal<boolean>(true); // Set this to false in production
 
   // Computed signal to determine if the timer should be displayed
+  // Only show in non-production environments
   readonly shouldShow = computed(
     () =>
-      this.showDebug() &&
+      !environment.production &&
       this.keycloak.authenticated &&
       this.inactivityService.isTracking(),
   );
@@ -64,29 +64,6 @@ export class InactivityTimerComponent implements OnInit, OnDestroy {
           this.timeUntilWarning.set(0);
         }
       });
-  }
-
-  /**
-   * Reset the inactivity timer for testing
-   */
-  resetTimer(): void {
-    this.inactivityService.resetTimer();
-  }
-
-  /**
-   * Simulate inactivity by manipulating the warning time threshold
-   * This is for testing only!
-   */
-  simulateInactivity(): void {
-    // Access the private service property for testing
-    const service = this.inactivityService as any;
-
-    // Force the last activity time to be in the past (just before warning threshold)
-    const warningThreshold = this.inactivityService.getWarningThreshold();
-    service.lastActivityTime = Date.now() - (warningThreshold - 2000); // 2 seconds before warning
-
-    // Log for debugging
-    console.log('Simulating inactivity - warning should appear in 2 seconds');
   }
 
   ngOnDestroy(): void {
